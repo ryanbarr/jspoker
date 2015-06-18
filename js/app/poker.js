@@ -6,7 +6,7 @@ define(function(require){
 		Player = require("object/Player"),
 		Table = require("object/Table"),
 		Seat = require("object/Seat"),
-		Deck = require("object/Deck");
+		TexasHoldem = require("game/TexasHoldem")
 
 	// SETUP
 
@@ -20,6 +20,7 @@ define(function(require){
 
 	// Create Table
 	var table = new Table({
+		game: TexasHoldem,
 		name: "No Limit Texas Hold'em 20/40"
 	});
 
@@ -33,12 +34,6 @@ define(function(require){
 
 	// Move Seats to Table
 	table.seats.push(seatOne, seatTwo);
-
-	// Generate Deck
-	var deck = new Deck;
-
-	// Place Deck on Fucking Table
-	table.deck = deck;
 
 	// Put the table on Window so its accessible outside of this scope.
 	window.table = table;

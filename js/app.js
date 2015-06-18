@@ -6,10 +6,19 @@
 requirejs.config({
     baseUrl: 'js',
     paths: {
-        object: 'app/objects'
+        object: 'app/objects',
+        game: 'app/games'
     }
 });
 
 // Start loading the main app file. Put all of
 // your application logic in there.
 requirejs(['app/poker']);
+
+window.debug = true;
+
+window.pokerLog = function(message){
+	if (window.debug) {
+		console.log(message);
+	}
+};
