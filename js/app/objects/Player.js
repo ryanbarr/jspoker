@@ -1,7 +1,9 @@
 define(function(){
+    var constants = require("app/constants");
+
     var Player = function(options){
         this.name = "";
-        this.id = ++currentId;
+        this.id = ++constants.currentId;
         this.chips = 0;
 
         _.extend(this, options);

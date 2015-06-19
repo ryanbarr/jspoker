@@ -1,17 +1,18 @@
 define(function(require){
 
-	var Card = require("object/Card");
+	var constants = require("app/constants"),
+		Card = require("object/Card");
 
 	var Deck = function(options){
 		this.cards = [];
 
 		// Iterate Over Ranks
-		for (var i = 0; i < ranks.length; i++){
+		for (var i = 0; i < constants.ranks.length; i++){
 			// Iterate Over Suits
-			for (var x = 0; x < suits.length; x++){
+			for (var x = 0; x < constants.suits.length; x++){
 				var card = new Card({
-					suit: suits[x],
-					rank: ranks[i]
+					suit: constants.suits[x],
+					rank: constants.ranks[i]
 				});
 
 				this.cards.push(card);

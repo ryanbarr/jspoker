@@ -40,9 +40,31 @@ define(function(require){
 			};
         };
 
+		self.takePlayersCards = function(){
+        	for (var s = 0; s < self.seats.length; s++){
+				var currentSeat = self.seats[s];
+
+				// Setting an array's length to 0 empties it. This removes the cards from the current seat.
+				currentSeat.cards.length = 0;
+			};
+		};
+
+		self.takeCommunityCards = function(){
+			// Setting an array's length to 0 empties it. This removes the cards from the community.
+			self.community.length = 0;
+		};
+
         self.deal = function(){
 
-        	// Randomly Select Dealer
+			// Remove cards from all players.
+			self.takePlayersCards();
+
+			// Remove cards from the community.
+			self.takeCommunityCards();
+
+            // Reset deck (since we "lose" cards when we deal).
+            self.deck = new Deck;
+
         	// Shuffle Deck
         	self.deck.cards = _.shuffle(self.deck.cards);
 
@@ -58,8 +80,59 @@ define(function(require){
 			// Deal River
 			self.giveCommunityCards(1);
 
-			// Determine Winner
+			// Determine Table Winner
+			var winningSeat = self.game.determineWinner(self);
 
+			return winningSeat;
+		};
+
+		self.simulateHands = function(numberOfHands){
+			// Store the current value of debug so we can reset it later.
+			var oldDebug = window.debug;
+
+			// Turn debugging off to reduce console noise.
+			window.debug = false;
+
+			var self = this,
+				winningHands = {},
+				handRanksForGame = self.game.handRanks,
+				timeStart = _.now();
+
+			if (_.isUndefined(numberOfHands)) { return; console.warn("You must provide the numberOfHands you would like to simulate."); }
+
+			for (var i = 0; i < numberOfHands; i++){
+				// Deal and get the winner.
+				var winningSeat = self.deal();
+
+				// If there were multiple winners, just pick the first for the sake of the simulation.
+				// The hand still won regardless of how many people had the hand itself.
+				if (_.isArray(winningSeat)) {
+					winningSeat = winningSeat[0];
+				}
+
+				// If this hand hasn't won before, add it to winning hands.
+				if (!winningHands[winningSeat.handRank]) {
+					winningHands[winningSeat.handRank] = 0;
+				}
+
+				// Increase the number of wins for the hand that won.
+				winningHands[winningSeat.handRank] = winningHands[winningSeat.handRank]+1;
+			}
+
+			var timeEnd = _.now(),
+				runTime = timeEnd - timeStart;
+
+			console.log("Played " + numberOfHands + " hands of " + self.game.name + " in " + runTime/1000 + " seconds.");
+
+			// Output results.
+			_.each(winningHands, function(numberOfWins, winningHandRank){
+				var hand = _.findWhere(self.game.handRanks, { rank: parseFloat(winningHandRank) });
+
+				console.log(hand.name + " won:", numberOfWins, "(" + ((numberOfWins / numberOfHands) * 100).toFixed(2) + "%)");
+			});
+
+			// Set debug back to its original state.
+			window.debug = oldDebug;
 		};
 
         _.extend(self, options);
