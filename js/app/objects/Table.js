@@ -126,9 +126,12 @@ define(function(require){
 			return winningSeat;
 		};
 
-		self.simulateHands = function(numberOfHands){
+		self.simulateHands = function(numberOfHands, delay){
 			// Store the current value of debug so we can reset it later.
-			var oldDebug = window.debug;
+			var oldDebug = window.debug,
+				executions = 0;
+
+			delay = delay || 0;
 
 			// Turn debugging off to reduce console noise.
 			window.debug = false;
@@ -140,7 +143,9 @@ define(function(require){
 
 			if (_.isUndefined(numberOfHands)) { return; console.warn("You must provide the numberOfHands you would like to simulate."); }
 
-			for (var i = 0; i < numberOfHands; i++){
+			// Declare an Immediately Invoked Function Expression (IIFE) which forces a simulation loop.
+			(function simulation(i, delay){
+				console.log('delaying...', delay);
 				// Deal and get the winner.
 				var winningSeat = self.deal();
 
@@ -157,7 +162,10 @@ define(function(require){
 
 				// Increase the number of wins for the hand that won.
 				winningHands[winningSeat.handRank] = winningHands[winningSeat.handRank]+1;
-			}
+
+				// Decrease i until it hits zero, at which point the simulation will not be run again.
+				if (--i) _.delay(simulation, delay, i, delay);
+			})(numberOfHands, delay);
 
 			var timeEnd = _.now(),
 				runTime = timeEnd - timeStart;
