@@ -82,12 +82,16 @@ define(function(require){
 
 				// Setting an array's length to 0 empties it. This removes the cards from the current seat.
 				currentSeat.cards.length = 0;
+
+				$(self).trigger("clear:player:cards");
 			};
 		};
 
 		self.takeCommunityCards = function(){
 			// Setting an array's length to 0 empties it. This removes the cards from the community.
 			self.community.length = 0;
+
+			$(self).trigger("clear:community:cards");
 		};
 
         self.deal = function(){

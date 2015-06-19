@@ -54,6 +54,16 @@ define(function(require){
 
 	$(table).on("deal:community", function(e, currentCard){
 		// Put card in community
-		$("#community").append('<div class="card card-'+ currentCard.rank + currentCard.suit +'">&nbsp;</div>');
+		$("#community .cards").append('<div class="card card-'+ currentCard.rank + currentCard.suit +'">&nbsp;</div>');
+	});
+
+	$(table).on("clear:player:cards", function(e){
+		// Put card in community
+		$(".seat .cards").empty();
+	});
+
+	$(table).on("clear:community:cards", function(e){
+		// Put card in community
+		$("#community .cards").empty();
 	});
 });
