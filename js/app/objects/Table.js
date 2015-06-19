@@ -52,6 +52,8 @@ define(function(require){
 
 					currentSeat.cards.push(currentCard);
 					window.pokerLog("Dealing Card " + currentCard.rank + " of " + currentCard.suit + " to " + currentSeat.player.name);
+
+					$(self).trigger("deal:player", [currentCard, currentSeat]);
 				};
 			};
         };
@@ -70,6 +72,7 @@ define(function(require){
 
 	        	self.community.push(currentCard);
 				window.pokerLog("Dealing Card " + currentCard.rank + " of " + currentCard.suit + " to Community");
+				$(self).trigger("deal:community", [currentCard]);
 			};
         };
 

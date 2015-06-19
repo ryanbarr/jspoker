@@ -25,18 +25,38 @@ define(function(require){
 
 	// Move Seats to Table
 	table.seats.push(new Seat({
-		player: kyle
+		player: kyle,
+		position: 0
 	}), new Seat({
-		player: ryan
+		player: ryan,
+		position: 1
 	}), new Seat({
-		player: john
+		player: john,
+		position: 2
 	}), new Seat({
-		player: pete
+		player: pete,
+		position: 3
 	}), new Seat({
-		player: bill
+		player: bill,
+		position: 4
 	}));
 
 	// Put the table on Window so its accessible outside of this scope.
 	window.table = table;
 
+	$(table).on("deal:player", function(e, currentCard, currentSeat){
+		console.log(currentCard, currentSeat);
+		// Find seat
+		var $seat = $("#seat" + (currentSeat.position + 1) + " .cards");
+
+		// Put card in seat
+		$seat.append('<div class="card">'+ currentCard.rank + currentCard.suit +'</div>');
+	});
+
+	$(table).on("deal:community", function(e, currentCard){
+		console.log(currentCard);
+
+		// Put card in community
+		$("#community").append('<div class="card">'+ currentCard.rank + currentCard.suit +'</div>');
+	});
 });

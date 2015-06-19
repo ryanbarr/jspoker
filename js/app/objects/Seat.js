@@ -4,6 +4,7 @@ define(function(){
         self.player = {};
         self.cards = [];
         self.balance = 0;
+        self.position = -1;
 
         self.withdraw = function(amount){
             self.balance = self.balance - amount;
