@@ -1,11 +1,21 @@
 define(function(){
     var Seat = function(options){
-        this.player = {};
-        this.cards = [];
+        var self = this;
+        self.player = {};
+        self.cards = [];
+        self.balance = 0;
 
-        _.extend(this, options);
+        self.withdraw = function(amount){
+            self.balance = self.balance - amount;
+        };
 
-        return this;
+        self.deposit = function(amount){
+        	self.balance = self.balance + amount;
+        };
+
+        _.extend(self, options);
+
+        return self;
     };
 
     return Seat;

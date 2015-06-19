@@ -10,6 +10,39 @@ define(function(require){
         self.seats = [];
         self.deck = new Deck;
         self.community = [];
+        self.pot = [];
+		self.activeBets = [];
+
+		self.bet = function(amount, seat){
+			// Acknowledge Bet
+			self.activeBets[seat] = (self.activeBets[seat]) ? self.activeBets[seat] + amount : amount;
+        };
+
+        self.collectActiveBets = function(pot){
+			// Iterates the active bets so they can be added to the pot
+			_.each(self.activeBets, function(activeBet){
+				// If there is an active bet in the current seat, add it to the pot
+				if (activeBet) {
+					window.pokerLog("Adding " + activeBet + " to pot " + pot);
+					// If there is a pot, add active bet to the pot, otherwise start a new pot
+					self.pot[pot] = (self.pot[pot]) ? self.pot[pot] + activeBet : activeBet;
+				}
+			});
+
+			// Clearing the active bets
+			self.activeBets.length = 0;
+		};
+
+		self.givePot = function(seat, pot){
+			// Select the current seat
+			var currentSeat = self.seats[seat];
+
+			// Give motherfucker pot
+			currentSeat.balance = currentSeat.balance + self.pot[pot];
+
+			// Clearing the pot
+			self.pot[pot] = 0;
+		};
 
         self.givePlayersCards = function(numberOfCards){
         	for (var c = 0; c < numberOfCards; c++){
