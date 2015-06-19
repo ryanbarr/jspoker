@@ -3,10 +3,10 @@ define(function(require){
 	var Deck = require("object/Deck"),
 		Game = require("object/Game");
 
-
     var Table = function(options){
     	var self = this;
     	self.game = new Game;
+		self.totalSeats = 9;
         self.seats = [];
         self.deck = new Deck;
         self.community = [];
