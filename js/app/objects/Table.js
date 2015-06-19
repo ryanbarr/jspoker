@@ -164,20 +164,22 @@ define(function(require){
 				winningHands[winningSeat.handRank] = winningHands[winningSeat.handRank]+1;
 
 				// Decrease i until it hits zero, at which point the simulation will not be run again.
-				if (--i) _.delay(simulation, delay, i, delay);
+				if (--i) {
+					_.delay(simulation, delay, i, delay);
+				} else {
+					var timeEnd = _.now(),
+						runTime = timeEnd - timeStart;
+
+					console.log("Played " + numberOfHands + " hands of " + self.game.name + " in " + runTime/1000 + " seconds.");
+
+					// Output results.
+					_.each(winningHands, function(numberOfWins, winningHandRank){
+						var hand = _.findWhere(self.game.handRanks, { rank: parseFloat(winningHandRank) });
+
+						console.log(hand.name + " won:", numberOfWins, "(" + ((numberOfWins / numberOfHands) * 100).toFixed(2) + "%)");
+					});
+				}
 			})(numberOfHands, delay);
-
-			var timeEnd = _.now(),
-				runTime = timeEnd - timeStart;
-
-			console.log("Played " + numberOfHands + " hands of " + self.game.name + " in " + runTime/1000 + " seconds.");
-
-			// Output results.
-			_.each(winningHands, function(numberOfWins, winningHandRank){
-				var hand = _.findWhere(self.game.handRanks, { rank: parseFloat(winningHandRank) });
-
-				console.log(hand.name + " won:", numberOfWins, "(" + ((numberOfWins / numberOfHands) * 100).toFixed(2) + "%)");
-			});
 
 			// Set debug back to its original state.
 			window.debug = oldDebug;
