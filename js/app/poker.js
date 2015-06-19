@@ -45,18 +45,15 @@ define(function(require){
 	window.table = table;
 
 	$(table).on("deal:player", function(e, currentCard, currentSeat){
-		console.log(currentCard, currentSeat);
 		// Find seat
 		var $seat = $("#seat" + (currentSeat.position + 1) + " .cards");
 
 		// Put card in seat
-		$seat.append('<div class="card">'+ currentCard.rank + currentCard.suit +'</div>');
+		$seat.append('<div class="card card-'+ currentCard.rank + currentCard.suit +'">&nbsp;</div>');
 	});
 
 	$(table).on("deal:community", function(e, currentCard){
-		console.log(currentCard);
-
 		// Put card in community
-		$("#community").append('<div class="card">'+ currentCard.rank + currentCard.suit +'</div>');
+		$("#community").append('<div class="card card-'+ currentCard.rank + currentCard.suit +'">&nbsp;</div>');
 	});
 });
