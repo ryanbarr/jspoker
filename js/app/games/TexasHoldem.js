@@ -296,6 +296,13 @@ define(function(require){
 
 			// If there are more than one winner, determine the best hand.
 			if (winners.length > 1) {
+				// Iterate over hands
+				var winner = winners[0]
+					winningHand = _.find(seat.handRank, function(){
+					// Determine better hand
+					return self.handRank 
+					// If the hand is the same determine better kicker
+				});
 				// console.log("there were multiple winners", winners);
 				return winners;
 			// If there is only one winner, they are the winner.
