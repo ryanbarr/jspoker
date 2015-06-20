@@ -121,9 +121,9 @@ define(function(require){
 			self.giveCommunityCards(1);
 
 			// Determine Table Winner
-			var winningSeat = self.game.determineWinner(self);
+			var winningSeats = self.game.determineWinner(self);
 
-			return winningSeat;
+			return winningSeats;
 		};
 
 		self.simulateHands = function(numberOfHands, delay){

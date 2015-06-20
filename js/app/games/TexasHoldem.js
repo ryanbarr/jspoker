@@ -32,59 +32,59 @@ define(function(require){
     	],
 
     	handMethods: {
-    		highCardTwo: function(allCards){
+    		highCardTwo: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "2"; });
 				return hasCard;
 			},
-			highCardThree: function(allCards){
+			highCardThree: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "3"; });
 				return hasCard;
 			},
-			highCardFour: function(allCards){
+			highCardFour: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "4"; });
 				return hasCard;
 			},
-			highCardFive: function(allCards){
+			highCardFive: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "5"; });
 				return hasCard;
 			},
-			highCardSix: function(allCards){
+			highCardSix: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "6"; });
 				return hasCard;
 			},
-			highCardSeven: function(allCards){
+			highCardSeven: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "7"; });
 				return hasCard;
 			},
-			highCardEight: function(allCards){
+			highCardEight: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "8"; });
 				return hasCard;
 			},
-			highCardNine: function(allCards){
+			highCardNine: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "9"; });
 				return hasCard;
 			},
-			highCardTen: function(allCards){
+			highCardTen: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "10"; });
 				return hasCard;
 			},
-			highCardJack: function(allCards){
+			highCardJack: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "J"; });
 				return hasCard;
 			},
-			highCardQueen: function(allCards){
+			highCardQueen: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "Q"; });
 				return hasCard;
 			},
-			highCardKing: function(allCards){
+			highCardKing: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "K"; });
 				return hasCard;
 			},
-			highCardAce: function(allCards){
+			highCardAce: function(allCards){ // High Card
 				var hasCard = _.find(allCards, function(card) { return card.rank === "A"; });
 				return hasCard;
 			},
-    		pair: function(allCards){
+    		pair: function(allCards){ // High Pair
 				// Group seven cards into potential pairs.
     			var pairs = _.groupBy(allCards, function(card){
     				return card.rank;
@@ -98,7 +98,7 @@ define(function(require){
 				// Return whether or not the hand has a pair.
     			return hasPair;
     		},
-    		twoPair: function(allCards){
+    		twoPair: function(allCards){ // High Pair
 				var numberOfPairs = 0;
 
 				// Group seven cards into potential pairs.
@@ -116,7 +116,7 @@ define(function(require){
 				// Return whether or not the player has more than one pair.
     			return numberOfPairs > 1;
 			},
-    		threeOfAKind: function(allCards){
+    		threeOfAKind: function(allCards){ // High Trips
 				// Group seven cards into matches.
     			var groups = _.groupBy(allCards, function(card){
     				return card.rank;
@@ -130,7 +130,7 @@ define(function(require){
 				// Return whether or not the hand has trips.
     			return hasTrips;
 			},
-    		straight: function(allCards){
+    		straight: function(allCards){ // High Card
 				// Pull all of the ranks from the hand.
 				var ranks = _.map(allCards, function(card){ return card.rank; });
 
@@ -164,7 +164,7 @@ define(function(require){
 
 				return inOrder === 5;
 			},
-    		flush: function(allCards){
+    		flush: function(allCards){ // High Card
 				// Group seven cards into matches of suits.
     			var groups = _.groupBy(allCards, function(card){
     				return card.suit;
@@ -177,7 +177,7 @@ define(function(require){
 
 				return hasFlush;
 			},
-    		fullHouse: function(allCards){
+    		fullHouse: function(allCards){ // Full Of
 				// Identify if the player has trips.
     			var hasTrips = this.threeOfAKind(allCards);
 
@@ -187,7 +187,7 @@ define(function(require){
 				// Return true if the player has both trips and a pair.
 				return (hasTrips && hasPair);
 			},
-    		fourOfAKind: function(allCards){
+    		fourOfAKind: function(allCards){ // High Quads
 				// Group seven cards into matches of ranks.
     			var groups = _.groupBy(allCards, function(card){
     				return card.rank;
@@ -200,7 +200,7 @@ define(function(require){
 
 				return hasQuads;
 			},
-    		straightFlush: function(allCards){
+    		straightFlush: function(allCards){ // High Card
 				// If the player doesn't have a flush, then no straight flush.
 				if (!this.flush(allCards)) { return false; }
 
@@ -222,7 +222,7 @@ define(function(require){
 
 				return hasStraightFlush;
 			},
-    		royalFlush: function(allCards){
+    		royalFlush: function(allCards){ // Auto-tie (Will fall to High Card and tie out)
 				// If the player doesn't have a flush, then no royal flush.
 				if (!this.flush(allCards)) { return false; }
 
@@ -276,7 +276,8 @@ define(function(require){
 
     	determineWinner: function(table){
 			var self = this,
-				seats = table.seats;
+				seats = table.seats,
+				winningSeats = [];
 
     		// Determine Players' Hands
     		_.each(seats, function(seat){
@@ -285,26 +286,100 @@ define(function(require){
 
     		// Determine Best Hands (Group Seats by Hand Rank).
 			var groupedRanks = _.groupBy(seats, function(seat){
-				return seat.handRank;
+				return parseFloat(seat.handRank);
 			});
 
 			// Sort the applicable hand ranks, and reverse them so 0 key is the highest.
-			var sortedRanks = _.sortBy(_.keys(groupedRanks), function(rank){ return rank; }).reverse();
+			var sortedRanks = _.sortBy(_.keys(groupedRanks), function(rank){ return parseFloat(rank); }).reverse();
 
 			// Pull the winner(s) from the groupedRanks.
 			var winners = groupedRanks[sortedRanks[0]];
-
+			console.log("Winners: ", winners);
 			// If there are more than one winner, determine the best hand.
 			if (winners.length > 1) {
-				// Iterate over hands
-				var winner = winners[0]
-					winningHand = _.find(seat.handRank, function(){
-					// Determine better hand
-					return self.handRank 
-					// If the hand is the same determine better kicker
-				});
-				// console.log("there were multiple winners", winners);
-				return winners;
+				// Determine what type of hand we have. (High card, higher pair, higher trips, full house.)
+				var highPair = [1, 2], // Pair, Two Pair
+					highTrips = [3], // Trips
+					highQuads = [7], // Quads
+					fullOf = [6], // Full House
+					winningHandRank = parseFloat(sortedRanks[0]),
+					winningSeatsKeys = [];
+
+				// If its not high pair, high trips, or full house then we assume High Card.
+				if (_.contains(highPair, winningHandRank)) { // Pair, Two Pair
+
+					if (winningHandRank === 1) { // Pair
+
+						console.log("Multiple winners with a Pair")
+						var winningPairs = {};
+
+						// Iterate over all the winners and store their pairs.
+						_.each(winners, function(currentWinner){
+							// Group community and current player's cards together.
+			    			var pairs = _.groupBy(_.union(table.community, currentWinner.cards), function(card){
+			    				return card.rank;
+			    			});
+
+							// Identify the pair the player has by finding which group has two cards.
+							var playerPair = _.find(pairs, function(groups){ return groups.length === 2; });
+
+							// Pull the hand rank key (A is 13, K is 12, etc.)
+							var handRankKey = _.indexOf(constants.ranks, playerPair[0].rank);
+
+							console.log("Player has Pair of ", handRankKey);
+
+							// If no player has had this pair before, create an array for the pair.
+							if (!_.isArray(winningPairs[handRankKey])) {
+								winningPairs[handRankKey] = [];
+							}
+
+							// Put the current seat in the list for this pair.
+							console.log("Current Winner: ", currentWinner);
+							winningPairs[handRankKey].push(currentWinner.position);
+						});
+
+						// Now that we've grouped the pairs, identify the highest pair.
+						var highestPair = _.sortBy(_.keys(winningPairs), function(rank){ return parseFloat(rank); }).reverse();
+						console.log("Highest Pair: ", highestPair);
+						// If there are multiple players with highest pair, check kickers.
+						if (winningPairs[highestPair[0]].length > 1) {
+
+							// Remove pair from card list.
+
+							// Sort remaining five cards high to low.
+
+							// Iterate over remaining high cards until a player beats out the other two.
+
+						// Otherwise, we found our winner!
+						} else {
+							winningSeatsKeys.push(winningPairs[highestPair[0]][0]);
+							console.warn("Winning Pairs ", winningPairs);
+							console.info("Highest Pair ", highestPair);
+						}
+						console.log("Winning seats keys: ", winningSeatsKeys);
+					} else { // Two Pair
+
+					}
+
+				} else if (_.contains(highTrips, winningHandRank)) { // Trips
+
+				} else if (_.contains(highQuads, winningHandRank)) { // Quads
+
+				} else if (_.contains(fullOf, winningHandRank)) { // Full House
+
+				} else { // High Card
+
+				}
+
+				// Take winning seat numbers and pull their actual seats again.
+				for (var key in winners) {
+					if (_.contains(winningSeatsKeys, winners[key].position)) {
+						console.log("Adding winning seat to list.");
+						winningSeats.push(_.find(winners, function(wn){ return wn.position === winners[key].position; }))
+					}
+				}
+				console.log("Winning Seats: ", winningSeats);
+				return winningSeats;
 			// If there is only one winner, they are the winner.
 			} else {
 				var winner = winners[0],
