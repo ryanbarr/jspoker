@@ -145,7 +145,6 @@ define(function(require){
 
 			// Declare an Immediately Invoked Function Expression (IIFE) which forces a simulation loop.
 			(function simulation(i, delay){
-				console.log('delaying...', delay);
 				// Deal and get the winner.
 				var winningSeat = self.deal();
 
