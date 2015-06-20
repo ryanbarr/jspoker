@@ -3,13 +3,46 @@ define(function(require){
 	var Deck = require("object/Deck"),
 		Game = require("object/Game");
 
-
     var Table = function(options){
     	var self = this;
     	self.game = new Game;
+		self.totalSeats = 9;
         self.seats = [];
         self.deck = new Deck;
         self.community = [];
+        self.pot = [];
+		self.activeBets = [];
+
+		self.bet = function(amount, seat){
+			// Acknowledge Bet
+			self.activeBets[seat] = (self.activeBets[seat]) ? self.activeBets[seat] + amount : amount;
+        };
+
+        self.collectActiveBets = function(pot){
+			// Iterates the active bets so they can be added to the pot
+			_.each(self.activeBets, function(activeBet){
+				// If there is an active bet in the current seat, add it to the pot
+				if (activeBet) {
+					window.pokerLog("Adding " + activeBet + " to pot " + pot);
+					// If there is a pot, add active bet to the pot, otherwise start a new pot
+					self.pot[pot] = (self.pot[pot]) ? self.pot[pot] + activeBet : activeBet;
+				}
+			});
+
+			// Clearing the active bets
+			self.activeBets.length = 0;
+		};
+
+		self.givePot = function(seat, pot){
+			// Select the current seat
+			var currentSeat = self.seats[seat];
+
+			// Give motherfucker pot
+			currentSeat.balance = currentSeat.balance + self.pot[pot];
+
+			// Clearing the pot
+			self.pot[pot] = 0;
+		};
 
         self.givePlayersCards = function(numberOfCards){
         	for (var c = 0; c < numberOfCards; c++){
@@ -19,6 +52,8 @@ define(function(require){
 
 					currentSeat.cards.push(currentCard);
 					window.pokerLog("Dealing Card " + currentCard.rank + " of " + currentCard.suit + " to " + currentSeat.player.name);
+
+					$(self).trigger("deal:player", [currentCard, currentSeat]);
 				};
 			};
         };
@@ -37,6 +72,7 @@ define(function(require){
 
 	        	self.community.push(currentCard);
 				window.pokerLog("Dealing Card " + currentCard.rank + " of " + currentCard.suit + " to Community");
+				$(self).trigger("deal:community", [currentCard]);
 			};
         };
 
@@ -46,12 +82,16 @@ define(function(require){
 
 				// Setting an array's length to 0 empties it. This removes the cards from the current seat.
 				currentSeat.cards.length = 0;
+
+				$(self).trigger("clear:player:cards");
 			};
 		};
 
 		self.takeCommunityCards = function(){
 			// Setting an array's length to 0 empties it. This removes the cards from the community.
 			self.community.length = 0;
+
+			$(self).trigger("clear:community:cards");
 		};
 
         self.deal = function(){
@@ -86,9 +126,12 @@ define(function(require){
 			return winningSeat;
 		};
 
-		self.simulateHands = function(numberOfHands){
+		self.simulateHands = function(numberOfHands, delay){
 			// Store the current value of debug so we can reset it later.
-			var oldDebug = window.debug;
+			var oldDebug = window.debug,
+				executions = 0;
+
+			delay = delay || 0;
 
 			// Turn debugging off to reduce console noise.
 			window.debug = false;
@@ -100,7 +143,8 @@ define(function(require){
 
 			if (_.isUndefined(numberOfHands)) { return; console.warn("You must provide the numberOfHands you would like to simulate."); }
 
-			for (var i = 0; i < numberOfHands; i++){
+			// Declare an Immediately Invoked Function Expression (IIFE) which forces a simulation loop.
+			(function simulation(i, delay){
 				// Deal and get the winner.
 				var winningSeat = self.deal();
 
@@ -117,19 +161,24 @@ define(function(require){
 
 				// Increase the number of wins for the hand that won.
 				winningHands[winningSeat.handRank] = winningHands[winningSeat.handRank]+1;
-			}
 
-			var timeEnd = _.now(),
-				runTime = timeEnd - timeStart;
+				// Decrease i until it hits zero, at which point the simulation will not be run again.
+				if (--i) {
+					_.delay(simulation, delay, i, delay);
+				} else {
+					var timeEnd = _.now(),
+						runTime = timeEnd - timeStart;
 
-			console.log("Played " + numberOfHands + " hands of " + self.game.name + " in " + runTime/1000 + " seconds.");
+					console.log("Played " + numberOfHands + " hands of " + self.game.name + " in " + runTime/1000 + " seconds.");
 
-			// Output results.
-			_.each(winningHands, function(numberOfWins, winningHandRank){
-				var hand = _.findWhere(self.game.handRanks, { rank: parseFloat(winningHandRank) });
+					// Output results.
+					_.each(winningHands, function(numberOfWins, winningHandRank){
+						var hand = _.findWhere(self.game.handRanks, { rank: parseFloat(winningHandRank) });
 
-				console.log(hand.name + " won:", numberOfWins, "(" + ((numberOfWins / numberOfHands) * 100).toFixed(2) + "%)");
-			});
+						console.log(hand.name + " won:", numberOfWins, "(" + ((numberOfWins / numberOfHands) * 100).toFixed(2) + "%)");
+					});
+				}
+			})(numberOfHands, delay);
 
 			// Set debug back to its original state.
 			window.debug = oldDebug;

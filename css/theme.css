@@ -1,0 +1,94 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 30px;
+}
+
+.theme-dropdown .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
+}
+
+.form-group.required label:after {
+    content: " *";
+    color: #f00;
+}
+
+#community {
+    text-align: center;
+}
+
+.seat {
+    text-align: center;
+}
+
+.card {
+    width: 73px;
+    height: 98px;
+    background: url('../images/cards.png');
+    display: inline-block;
+}
+
+.card-AC { background-position: -949px 0; }
+.card-KC { background-position: -876px 0; }
+.card-QC { background-position: -803px 0; }
+.card-JC { background-position: -730px 0; }
+.card-10C { background-position: -657px 0; }
+.card-9C { background-position: -584px 0; }
+.card-8C { background-position: -511px 0; }
+.card-7C { background-position: -438px 0; }
+.card-6C { background-position: -365px 0; }
+.card-5C { background-position: -292px 0; }
+.card-4C { background-position: -219px 0; }
+.card-3C { background-position: -146px 0; }
+.card-2C { background-position: -73px 0; }
+
+.card-AH { background-position: -949px -98px; }
+.card-KH { background-position: -876px -98px; }
+.card-QH { background-position: -803px -98px; }
+.card-JH { background-position: -730px -98px; }
+.card-10H { background-position: -657px -98px; }
+.card-9H { background-position: -584px -98px; }
+.card-8H { background-position: -511px -98px; }
+.card-7H { background-position: -438px -98px; }
+.card-6H { background-position: -365px -98px; }
+.card-5H { background-position: -292px -98px; }
+.card-4H { background-position: -219px -98px; }
+.card-3H { background-position: -146px -98px; }
+.card-2H { background-position: -73px -98px; }
+
+.card-AS { background-position: -949px -196px; }
+.card-KS { background-position: -876px -196px; }
+.card-QS { background-position: -803px -196px; }
+.card-JS { background-position: -730px -196px; }
+.card-10S { background-position: -657px -196px; }
+.card-9S { background-position: -584px -196px; }
+.card-8S { background-position: -511px -196px; }
+.card-7S { background-position: -438px -196px; }
+.card-6S { background-position: -365px -196px; }
+.card-5S { background-position: -292px -196px; }
+.card-4S { background-position: -219px -196px; }
+.card-3S { background-position: -146px -196px; }
+.card-2S { background-position: -73px -196px; }
+
+.card-AD { background-position: -949px -294px; }
+.card-KD { background-position: -876px -294px; }
+.card-QD { background-position: -803px -294px; }
+.card-JD { background-position: -730px -294px; }
+.card-10D { background-position: -657px -294px; }
+.card-9D { background-position: -584px -294px; }
+.card-8D { background-position: -511px -294px; }
+.card-7D { background-position: -438px -294px; }
+.card-6D { background-position: -365px -294px; }
+.card-5D { background-position: -292px -294px; }
+.card-4D { background-position: -219px -294px; }
+.card-3D { background-position: -146px -294px; }
+.card-2D { background-position: -73px -294px; }

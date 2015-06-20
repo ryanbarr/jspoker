@@ -2,13 +2,22 @@ define(function(){
     var constants = require("app/constants");
 
     var Player = function(options){
-        this.name = "";
-        this.id = ++constants.currentId;
-        this.chips = 0;
+    	var self = this;
+        self.name = "";
+        self.id = ++constants.currentId;
+        self.balance = 1000;
 
-        _.extend(this, options);
+        self.withdraw = function(amount){
+            self.balance = self.balance - amount;
+        };
 
-        return this;
+        self.deposit = function(amount){
+        	self.balance = self.balance + amount;
+        };
+
+        _.extend(self, options);
+
+        return self;
     };
 
     return Player;
